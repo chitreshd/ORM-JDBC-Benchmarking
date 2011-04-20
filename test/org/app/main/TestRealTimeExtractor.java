@@ -22,11 +22,11 @@ import org.junit.Test;
  */
 public class TestRealTimeExtractor {
 
-	@Test
+	//@Test
 	public void test() throws IllegalArgumentException, ParseException,
 			IllegalStateException, IOException {
 		RealTimeDataExtractor extractor = new RealTimeDataExtractor();
-		List<RealtimeData> list = extractor.extractTuples(5);
+		List<RealtimeData> list = extractor.parseFile(5);
 		assertEquals(list.size(),5);
 	}
 
@@ -35,7 +35,7 @@ public class TestRealTimeExtractor {
 		RealTimeDataExtractor extractor = new RealTimeDataExtractor();
 		try {
 			RealtimeData expectedObject = extractor
-					.parseLine("AA     Alcoa Inc. Common        3/4/2011    16.57    -0.33     0.72    68.72     0.84     2.00   \"16.37 - 16.80\"    16.73    -0.93    13.94    18.91    19.55      18617484      28989900");
+					.parseLine("AAR     AMR Corporation          3/4/2011    23.61    -0.04     8.33     0.00     0.00     0.00 \"23.61 - 23.8636\"    23.55     0.25    23.49     0.50     0.00          6214         10240");
 
 			// Compare some of the data objects.
 			assertEquals("AA", expectedObject.getSymbol());
@@ -47,6 +47,14 @@ public class TestRealTimeExtractor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//@Test
+	public void testParseWithStringParam() throws IllegalStateException, IllegalArgumentException, IOException, ParseException{
+		RealTimeDataExtractor extractor = new RealTimeDataExtractor();
+		List<RealtimeData> dList = extractor.parseFile("RealTimetest");
+		System.out.println(dList);
+		
 	}
 
 }

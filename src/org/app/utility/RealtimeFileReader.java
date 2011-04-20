@@ -59,4 +59,31 @@ public class RealtimeFileReader {
 		return reader.readLine();
 	}
 	
+	public String[] getFileNames(String dirPath) throws IllegalArgumentException{
+		if(dirPath.isEmpty() || dirPath == null)
+			throw new IllegalArgumentException("Null / Empty value not allowed.");
+		File dir = new File(dirPath);
+		if(dir.isDirectory()){
+			String [] fileList = dir.list();
+			return fileList;
+		}			
+		else
+			System.out.println("Its not a dir");
+			return null;
+	}
+	
+	public String stripExtension(String fileName){
+		String [] tokens = fileName.split("\\.");
+		return tokens[0];				
+	}
+	
+	// WARNING !!! Dont call this on directories.
+	public String getExtension(){		
+		return pathName.substring(pathName.lastIndexOf("."));
+	}
+	
+	public String getFileName(String path){
+		return path.substring(path.lastIndexOf(System.getProperty("file.separator")) + 1, path.lastIndexOf("."));
+	}
+	
 }

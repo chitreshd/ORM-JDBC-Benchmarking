@@ -1,7 +1,7 @@
 /**
  * 
  */
-package src.app.test;
+package org.app.utility;
 
 import static org.junit.Assert.*;
 
@@ -9,9 +9,9 @@ import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.app.utility.LocalFileReader;
 import org.junit.Test;
 
-import src.app.utility.LocalFileReader;
 
 
 /**

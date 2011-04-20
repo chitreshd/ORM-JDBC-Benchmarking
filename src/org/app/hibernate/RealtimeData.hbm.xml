@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.app.data">
+
+	<class name="RealtimeData" lazy="false" table="livestock">
+
+		<!-- auto-generated key -->
+		<id name="symbol" column="symbol" type="string">			
+		</id>	
+		
+		<property name="date" column="date" type="date" />
+		<property name="price" column="price" type="float"/>
+		<property name="percentChange" column="percentChange" type="float"/>
+		<property name="yield" column="yield" type="float"/>
+		<property name="pe" column="pe" type="float"/>
+		<property name="peg" column="peg" type="float"/>
+		<property name="shortD" column="short" type="float"/>
+		<property name="range" column="ranger" type="java.lang.String"/>	
+		<property name="avg50D" column="50Davg" type="float"/>		
+		<property name="chng50D" column="50Chng" type="float"/>
+		<property name="avg200D" column="200Davg" type="float"/>
+		<property name="chng200D" column="200Chng" type="float"/>
+		<property name="target1Y" column="1YTarget" type="float"/>
+		<property name="volume" column="volume" type="double"/>
+		<property name="avgVolume" column="avgVolume" type="double"/>
+		
+		<join table="CompanyInfo">
+			<key column = "symbol"/>
+			<property name="companyInfo" column="CompanyName" type="java.lang.String" />
+		</join>
+
+	</class>	
+</hibernate-mapping>

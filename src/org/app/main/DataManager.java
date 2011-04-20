@@ -110,7 +110,7 @@ public class DataManager {
 		log.info("Now we will be retrieving the data from file and inserting into DB");
 		
 		RealTimeDataExtractor extractor = new RealTimeDataExtractor();
-		List<RealtimeData> list = extractor.extractTuples(5);
+		List<RealtimeData> list = extractor.parseFile(5);
 		for(int a = 0; a < 5; a++){
 			data = list.get(a);
 			ps.setString(1, data.getSymbol());

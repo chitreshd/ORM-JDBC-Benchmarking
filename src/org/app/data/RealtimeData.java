@@ -6,7 +6,11 @@ package org.app.data;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.app.main.RealTimeDataExtractor;
+
 
 /**
  * @author Chitresh Deshpande
@@ -14,39 +18,31 @@ import java.util.Date;
  * Copyright 2011, San Jose State University
  *
  */
-public class RealtimeData {
-	private String symbol;
-	private String companyInfo;
-	private Date date;
-	private float price;
-	private float percentChange;
-	private float yield;
-	private float pe;
-	private float peg;
-	private float shortD;
-	private String range;
-	private float avg50D;
-	private float chng50D;
-	private float avg200D;
-	private float chng200D;
-	private float target1Y;
-	private double volume;
-	private double avgVolume;
+
+public class RealtimeData extends AData {
+	private static final Log log = LogFactory
+	.getLog(RealTimeDataExtractor.class);
 	
-	/**
-	 * @return
-	 */
-	public String getSymbol() {
-		return symbol;
-	}
-	/**
-	 * @param symbol
-	 */
-	public void setSymbol(String symbol) throws IllegalArgumentException{
-		if((symbol == null) || (symbol.isEmpty()))
-			throw new IllegalArgumentException();
-		this.symbol = symbol;
-	}
+	
+	protected String companyInfo;
+	
+	
+	protected float price;
+	protected float percentChange;
+	protected float yield;
+	protected float pe;
+	protected float peg;
+	protected float shortD;
+	protected String range;
+	protected float avg50D;
+	protected float chng50D;
+	protected float avg200D;
+	protected float chng200D;
+	protected float target1Y;
+	protected double volume;
+	protected double avgVolume;
+	
+	
 	/**
 	 * @return
 	 */
@@ -232,12 +228,7 @@ public class RealtimeData {
 	/**
 	 * @param date the date to set
 	 */
-	/**
-	 * @param date
-	 */
-	public void setDate(Date date) {
-		this.date = date;
-	}
+	
 	
 	/**
 	 * @param date the date to set
@@ -249,39 +240,44 @@ public class RealtimeData {
 	public void setDate(String date){
 		DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 		try {
-			this.date = format.parse(date);
+			setDate(format.parse(date));
 		} catch (ParseException e) {
 			// TODO This is a time being fix.
-			setDate("03/04/2011");		
+			setDate("03/04/2011");
+			log.error("Date was null and hence setting up the date as today's date.");
 		}		
 	}
 	/**
 	 * @return the date
 	 */
-	/**
-	 * @return
+	
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
 	 */
-	public Date getDate() {
-		return date;
-	}
+	
+	
+	
+	
+	
 	@Override
 	public String toString() {
-		return "RealtimeData [symbol=" + symbol + ", companyInfo="
-				+ companyInfo + ", date=" + date + ", price=" + price
+		return "RealtimeData [companyInfo=" + companyInfo + ", price=" + price
 				+ ", percentChange=" + percentChange + ", yield=" + yield
 				+ ", pe=" + pe + ", peg=" + peg + ", shortD=" + shortD
 				+ ", range=" + range + ", avg50D=" + avg50D + ", chng50D="
 				+ chng50D + ", avg200D=" + avg200D + ", chng200D=" + chng200D
 				+ ", target1Y=" + target1Y + ", volume=" + volume
-				+ ", avgVolume=" + avgVolume + "]";
+				+ ", avgVolume=" + avgVolume + ", symbol=" + symbol + ", date="
+				+ date + "]";
 	}
 	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + Float.floatToIntBits(avg200D);
 		result = prime * result + Float.floatToIntBits(avg50D);
 		long temp;
@@ -291,28 +287,23 @@ public class RealtimeData {
 		result = prime * result + Float.floatToIntBits(chng50D);
 		result = prime * result
 				+ ((companyInfo == null) ? 0 : companyInfo.hashCode());
-		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + Float.floatToIntBits(pe);
 		result = prime * result + Float.floatToIntBits(peg);
 		result = prime * result + Float.floatToIntBits(percentChange);
 		result = prime * result + Float.floatToIntBits(price);
 		result = prime * result + ((range == null) ? 0 : range.hashCode());
 		result = prime * result + Float.floatToIntBits(shortD);
-		result = prime * result + ((symbol == null) ? 0 : symbol.hashCode());
 		result = prime * result + Float.floatToIntBits(target1Y);
 		temp = Double.doubleToLongBits(volume);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + Float.floatToIntBits(yield);
 		return result;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -336,11 +327,6 @@ public class RealtimeData {
 				return false;
 		} else if (!companyInfo.equals(other.companyInfo))
 			return false;
-		if (date == null) {
-			if (other.date != null)
-				return false;
-		} else if (!date.equals(other.date))
-			return false;
 		if (Float.floatToIntBits(pe) != Float.floatToIntBits(other.pe))
 			return false;
 		if (Float.floatToIntBits(peg) != Float.floatToIntBits(other.peg))
@@ -357,11 +343,6 @@ public class RealtimeData {
 			return false;
 		if (Float.floatToIntBits(shortD) != Float.floatToIntBits(other.shortD))
 			return false;
-		if (symbol == null) {
-			if (other.symbol != null)
-				return false;
-		} else if (!symbol.equals(other.symbol))
-			return false;
 		if (Float.floatToIntBits(target1Y) != Float
 				.floatToIntBits(other.target1Y))
 			return false;
@@ -371,6 +352,18 @@ public class RealtimeData {
 		if (Float.floatToIntBits(yield) != Float.floatToIntBits(other.yield))
 			return false;
 		return true;
-	}	
+	}
+	
+	public boolean isGood(){
+		/*The bean is not good 
+			if any of the string elements is null
+			if symbol or date is empty*/
+			if(symbol == null || companyInfo == null || date == null)
+				return false;
+			else if (symbol.isEmpty())
+				return false;
+			else		
+				return true;
+	}
 	
 }

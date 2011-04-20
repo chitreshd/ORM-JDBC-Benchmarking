@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.app.data">
+
+	<class name="HistoricData" lazy="false" table="historicdata">
+
+		<!-- auto-generated key -->
+		<id name="symbol" column="symbol" type="string">			
+		</id>	
+		
+		<property name="date" column="date" type="date" />
+		<property name="open" column="open" type="float"/>
+		<property name="high" column="high" type="float"/>
+		<property name="low" column="low" type="float"/>
+		<property name="close" column="close" type="float"/>
+		<property name="volume" column="volume" type="double"/>
+		<property name="adjClose" column="adjClose" type="float"/>	
+		
+
+	</class>	
+</hibernate-mapping>

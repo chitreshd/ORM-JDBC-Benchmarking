@@ -16,7 +16,6 @@ import org.apache.commons.logging.LogFactory;
 import org.app.data.RealtimeData;
 import org.app.utility.RealtimeFileReader;
 
-
 /**
  * @author Chitresh Deshpande
  * 
@@ -33,10 +32,10 @@ public class RealTimeDataExtractor {
 		fileReader = RealtimeFileReader.getInstance();
 	}
 
-	public List<RealtimeData> extractTuples(int limit)
+	public List<RealtimeData> parseFile(int limit)
 			throws IllegalStateException, IOException,
 			IllegalArgumentException, ParseException {
-		
+
 		List<RealtimeData> list = new ArrayList<RealtimeData>();
 
 		fileReader.setPathName("realtime");
@@ -44,12 +43,40 @@ public class RealTimeDataExtractor {
 
 		String tupple = fileReader.getLine();
 		fileReader.getLine();
-		
+
 		for (int i = 0; i < limit; i++) {
 			tupple = fileReader.getLine();
 			log.info("Line " + i + tupple);
 			RealtimeData temp = parseLine(tupple);
 			list.add(temp);
+		}
+
+		fileReader.close();
+		return list;
+	}
+
+	public List<RealtimeData> parseFile(String fileName)
+			throws IllegalStateException, IOException,
+			IllegalArgumentException, ParseException {
+
+		List<RealtimeData> list = new ArrayList<RealtimeData>();
+
+		fileReader.setPathName(fileName);
+		fileReader.open();
+
+		for (int i = 0; i < 2; i++)
+			fileReader.getLine(); // skip first two lines.
+
+		String tupple = fileReader.getLine();
+
+		while (tupple != null) {
+			log.debug(">> " + tupple);
+			RealtimeData temp = parseLine(tupple);
+			if (temp != null)
+				if (temp.isGood())
+					list.add(temp); // add the object to list if the data bean
+									// is in good state.
+			tupple = fileReader.getLine();
 		}
 
 		fileReader.close();
@@ -86,27 +113,34 @@ public class RealTimeDataExtractor {
 		}
 
 		// 17
-		System.out.println("Entire token list: " + token);
+		/* System.out.println("Entire token list: " + token); */
 		if (token.size() == 17) {
-			System.out.println("Parsing successfull ");
+			/* System.out.println("Parsing successfull "); */
 			// Lame code. Finding a way to make it smarter.
-			object.setSymbol(token.get(0));
-			object.setCompanyInfo(token.get(1));
-			object.setDate(token.get(2));
-			object.setPrice(Float.parseFloat(token.get(3)));
-			object.setPercentChange(Float.parseFloat(token.get(4)));
-			object.setYield(Float.parseFloat(token.get(5)));
-			object.setPe(Float.parseFloat(token.get(6)));
-			object.setPeg(Float.parseFloat(token.get(7)));
-			object.setShortD(Float.parseFloat(token.get(8)));
-			object.setRange(token.get(9));
-			object.setAvg50D(Float.parseFloat(token.get(10)));
-			object.setChng50D(Float.parseFloat(token.get(11)));
-			object.setAvg200D(Float.parseFloat(token.get(12)));
-			object.setChng200D(Float.parseFloat(token.get(13)));
-			object.setTarget1Y(Float.parseFloat(token.get(14)));
-			object.setVolume(Double.parseDouble(token.get(15)));
-			object.setAvgVolume(Double.parseDouble(token.get(16)));
+			try {
+				object.setSymbol(token.get(0));
+				object.setCompanyInfo(token.get(1));
+				String fDate = token.get(2);
+				if (fDate == null || fDate.isEmpty())
+					fDate = "03/04/2011";
+				object.setDate(fDate);
+				object.setPrice(Float.parseFloat(token.get(3)));
+				object.setPercentChange(Float.parseFloat(token.get(4)));
+				object.setYield(Float.parseFloat(token.get(5)));
+				object.setPe(Float.parseFloat(token.get(6)));
+				object.setPeg(Float.parseFloat(token.get(7)));
+				object.setShortD(Float.parseFloat(token.get(8)));
+				object.setRange(token.get(9));
+				object.setAvg50D(Float.parseFloat(token.get(10)));
+				object.setChng50D(Float.parseFloat(token.get(11)));
+				object.setAvg200D(Float.parseFloat(token.get(12)));
+				object.setChng200D(Float.parseFloat(token.get(13)));
+				object.setTarget1Y(Float.parseFloat(token.get(14)));
+				object.setVolume(Double.parseDouble(token.get(15)));
+				object.setAvgVolume(Double.parseDouble(token.get(16)));
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
 		}
 		return object;
 
